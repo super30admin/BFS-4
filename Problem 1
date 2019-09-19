@@ -1,0 +1,35 @@
+//Time Complexity: O(n)
+//Space Complexity: O(n)
+
+Idea: For each employee, traverse it's adjacency list. While traversing, add the importance.
+BFS traversal of directed graph.
+
+class Solution {
+    public int getImportance(List<Employee> employees, int id) {
+        
+        int total_imp =0;
+        Queue<Employee> q = new LinkedList<>();
+        HashMap<Integer, Employee> map = new HashMap<>();
+        
+        for(Employee emp: employees)
+        {
+            map.put(emp.id,emp);
+        }
+                 
+        q.add(map.get(id));
+               
+        while(!q.isEmpty())
+        {
+            Employee current = q.poll();
+            total_imp += current.importance;
+            for(int sub: current.subordinates)
+            {   
+                q.add(map.get(sub));
+            }
+            
+        }
+        
+        return total_imp;
+        
+    }
+}
