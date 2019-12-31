@@ -1,0 +1,106 @@
+/*
+
+I am missing something here, i.e for some reason I am getting result off by one.
+
+
+Leetcode unsuccessful
+
+Approach:
+
+make matrix of just the numbers.
+
+also put the index of each number corresponding to its location in the matrix in a hashmap.
+
+now put initial element in the queue.
+for every level i.e element + 1 / 2/ .. /6, put everything in the queue and process in next step.
+
+from the hash map find out the indices, and the value at that indices.
+go that particular index, using this value, which is stored in a hashmap.
+
+
+
+
+*/
+
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        
+        Queue<int []> qm = new LinkedList<>();
+        HashMap<Integer,int []> hm = new HashMap<>();
+        
+        int steps=0;
+        int r=board.length;
+        int c=board[0].length;
+        
+        int [][] base = new int[r][c];
+        int [] temp = new int []{r-1,0};
+        int [] temp1 = new int [2];
+        
+        
+        int count=0;
+        int lr=0;
+        int dr=0;
+        for(int i=r-1;i>=0;i--)
+        {
+            for(int j=dr;j<c;j++)
+            {
+                base[i][Math.abs(j)]=count++;
+                hm.put(count,new int[]{i,Math.abs(j)});
+                
+            }
+            if(lr%2==0)
+            {
+                lr++;
+                dr=-(c-1);
+            }
+            else dr=0;
+            
+            
+        }
+        
+        
+        qm.add(temp);
+        int [] incr = new int []{1,2,3,4,5,6};
+        
+        while(qm.size()>0)
+        {
+            int qlen=qm.size();
+            steps++;   
+            for(int i=0;i<qlen;i++)
+            {
+               temp1=qm.poll();
+               int p=temp1[0];
+               int q=temp1[1];
+                
+               
+              //  if(base[p][q]==)
+              
+                for(int inc : incr)
+                {
+                    int start=base[p][q];
+                    int end=start+inc;
+                    if(end<0|| end >r*c) continue ;
+                    else if(end==r*c) return steps;
+                    int [] newar=hm.get(end);
+            //        System.out.printf("%d   %d  \n",newar[0],newar[1]);
+                    System.out.printf("%d   %d \n",start,end);
+                    if(newar[0]<r&&newar[0]>=0&&newar[1]<c&&newar[1]>=0)
+                    {
+                        if(board[newar[0]][newar[1]]!=-1)
+                            newar=hm.get(board[newar[0]][newar[1]]);
+
+                        qm.add(newar);
+                    }
+                  //  else continue
+                }
+             
+                
+               
+            }
+          //  System.out.println(qm);
+        //    steps++;
+        }
+     
+        return -1;
+    }
+}
