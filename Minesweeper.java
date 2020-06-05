@@ -3,8 +3,13 @@
 // Did this code successfully run on Leetcode : Yes
 // Any problem you faced while coding this : No
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class Minesweeper {
-    public char[][] updateBoard(char[][] board, int[] click) {
+
+    // DFS Solution
+    public char[][] updateBoardDFS(char[][] board, int[] click) {
         int i = click[0];
         int j = click[1];
 
@@ -57,5 +62,76 @@ public class Minesweeper {
         }
 
         return mines;
+    }
+
+    // BFS Solution
+
+    int m;
+    int n;
+
+    public char[][] updateBoardBFS(char[][] board, int[] click) {
+        if(board == null || board.length == 0){
+            return board;
+        }
+
+        m = board.length;
+        n = board[0].length;
+
+        int i = click[0];
+        int j = click[1];
+
+        if(board[i][j] == 'M'){
+            board[i][j] = 'X';
+            return board;
+        }
+
+        Queue<int[]> q = new LinkedList<>();
+        board[i][j] = 'B';
+        q.add(click);
+
+        while(!q.isEmpty()){
+
+            int[] curr = q.poll();
+
+            int adjMines = calculateMines(board, curr[0], curr[1]);
+
+            if(adjMines == 0){
+
+                for(int[] dir : dirs){
+
+                    int x = curr[0] + dir[0];
+                    int y =  curr[1] + dir[1];
+
+                    if(x >= 0 && x < m && y >=0 && y < n && board[x][y] == 'E'){
+
+                        q.add(new int[] {x,y});
+                        board[x][y] = 'B';
+                    }
+                }
+            } else {
+                board[curr[0]][curr[1]] = (char) (adjMines + '0');
+            }
+        }
+
+        return board;
+
+    }
+
+
+    int[][] dirs = new int[][]{{-1,0}, {1,0}, {0,-1}, {0, 1}, {-1,-1}, {1,1}, {-1,1}, {1, -1}};
+
+    private int calculateMines(char[][] board, int i, int j){
+        int count = 0;
+        for(int[] dir : dirs){
+
+            int x = i + dir[0];
+            int y = j + dir[1];
+
+            if(x >= 0 && x < m && y >=0 && y < n && board[x][y] == 'M'){
+                count++;
+            }
+        }
+
+        return count;
     }
 }
