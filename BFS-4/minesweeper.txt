@@ -1,0 +1,51 @@
+// executed on leetcode
+// time comp = O(n)
+
+class Solution {
+    int[][] dirs={{-1,-1},{0,-1},{1,-1},{-1,0},{1,1},{1,0},{-1,1},{0,1}};// directions to search of a particular index
+    public char[][] updateBoard(char[][] board, int[] click) {
+        int i=click[0];
+        int j=click[1];
+        if(board[i][j]=='M') // if mine then stop
+        {
+            board[i][j]='X';
+            return board;
+        }
+        dfs(board,i,j);
+        return board;
+    }
+    public void dfs(char[][] board,int i,int j)
+    {
+        if(i<0|| i>=board.length || j<0||j>=board[0].length || board[i][j]!='E')// if out of index then return
+            return;
+        int mine=getMine(board,i,j); // calculate no of mines adjacent to that button
+        if(mine==0)
+        {
+            board[i][j]='B';
+            for(int k=0;k<8;k++)
+            {
+                int r=i+dirs[k][0];
+                int c=j+dirs[k][1];
+                dfs(board,r,c);
+            }
+        }
+        else
+        {
+            board[i][j]=(char)(mine+'0');
+        }
+    }
+    public int getMine(char[][] board,int i,int j)
+    {
+        int count=0;
+        for(int k=0;k<8;k++)
+            {
+                int r=i+dirs[k][0];
+                int c=j+dirs[k][1];
+                if(r<0|| r>=board.length || c<0||c>=board[0].length)
+                    continue;
+                if(board[r][c]=='M')
+                    count++;
+            }
+        return count;
+    }
+}
