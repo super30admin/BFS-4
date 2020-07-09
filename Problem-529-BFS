@@ -1,0 +1,99 @@
+/*
+Time Complexity: O(n)
+Space Complexity: O(n)
+
+Leetcode Successful
+
+
+Approach: 
+BFS
+As base case check 
+check level by level using queue.
+
+put first element in the queue.
+then pop this element and put all the children in the queue
+exhaust all the childredn one by one and put their children in the queue
+
+check each element of the queue at a level.
+//1 check if it is M, game over and return.
+//2. check if it is E
+//2.A iterate through  dirs array and check, if you have a mine near by then put the count of number of mines in             place of E
+
+
+Progress Case:
+//2.B else, put B in that place and call same function in dirs
+
+
+*/
+
+class Solution {
+
+    int [][] dirs = new int [][]{{1,1},{1,0},{0,1},{-1,0},{0,-1},{-1,-1},{1,-1},{-1,1}};
+
+    public char[][] updateBoard(char[][] board, int[] click) {
+        
+        Queue<int []> qm = new LinkedList<int []>();
+        
+        
+        qm.add(click);
+        
+        int [] temp=new int[2];
+  //      int [] temp1= new int[2];
+        boolean flag=false;
+        while(qm.size()>0)
+        {
+            int qlen=qm.size();
+            
+            for(int i=0;i<qlen;i++)
+            {
+                int minecount=0;
+                temp=qm.poll();
+                int  p=temp[0];
+                int  q=temp[1];
+ 
+                if(board[p][q]=='M')
+                {
+                    board[p][q]='X';
+                    return board;
+                }
+                else if(board[p][q]=='E')
+                {
+                    // check mines
+                    for(int [] dir: dirs)
+                    {
+                        int ro= p+dir[0];
+                        int co= q+dir[1];
+                        if(ro<board.length&&ro>=0&&co<board[0].length&&co>=0&&board[ro][co]=='M') minecount++;
+                    }
+                 
+                if(minecount>0) board[p][q]=(char)('0'+minecount);
+                else{
+
+                // progress case
+                //1.B else, put B in that place and put these indexes in the queue.
+
+                    board[p][q]='B';                
+                    for(int [] dir : dirs)
+                    {
+                        int ro =dir[0]+p;
+                        int co = dir[1]+q;
+
+                        if(ro<board.length&&ro>=0&&co<board[0].length&&co>=0&&board[ro][co]=='E')
+                        {
+                           // board[][]
+                            qm.add(new int[]{ro,co});
+                        }
+                    }             
+
+                }
+
+                    }
+
+                }
+
+
+            }
+
+            return board;
+    }
+}

@@ -1,0 +1,96 @@
+/*
+Time Complexity: O(n)
+Space Complexity: O(1) // ignoring recursive stack
+Leetcode: Successful
+
+Approach:
+
+This is a DFS approach.
+
+As base case check 
+//1 check if it is M, game over and return.
+//2. check if it is E
+//2.A call recursive function on dirs array and check, if you have a mine near by then put the count of number of mines in             place of E
+
+
+Progress Case:
+//2.B else, put B in that place and call same function in dirs
+
+*/
+
+class Solution {
+    boolean flag=false;
+    public char[][] updateBoard(char[][] board, int[] click) {
+        
+        helper(board,click);    
+        return board;
+        
+    }
+    
+
+ 
+    int [][] dirs = new int [][]{{1,1},{1,0},{0,1},{-1,0},{0,-1},{-1,-1},{1,-1},{-1,1}};
+    
+   void helper(char[][]board, int [] click)
+    {
+        // base case 
+        //2. check if it is M, game over and return.
+        //1. check if it is E
+        //1.A call dirs array and check, if you have a mine near by then put the count of number of mines in             place of E
+       
+       
+        int i=click[0];
+        int j=click[1];
+       
+    //    System.out.printf("i value is %d j value is    %d \n",i,j);
+
+        int minecount=0;
+        
+        if(flag==true) return;
+        
+        if(board[i][j]=='M')
+        {
+            // game over
+            board[click[0]][click[1]]='X';
+            flag=true;
+            return;
+        }
+        else if(board[i][j]=='E')
+        {
+            for(int [] dir : dirs)
+            {
+                int ro =dir[0]+i;
+                int co = dir[1]+j;
+                
+                if(ro<board.length&&ro>=0&&co<board[0].length&&co>=0&&board[ro][co]=='M')
+                {
+                    minecount++;
+                    
+                }    
+            }
+            
+            if(minecount>0) board[i][j]=(char)('0'+minecount);
+            else{
+                
+            // progress case
+            //1.B else, put B in that place and call same function in dirs
+
+                board[i][j]='B';                
+                for(int [] dir : dirs)
+                {
+                    int ro =dir[0]+i;
+                    int co = dir[1]+j;
+                    
+                    if(ro<board.length&&ro>=0&&co<board[0].length&&co>=0&&board[ro][co]=='E')
+                        helper(board,new int[]{ro,co});
+
+                }
+                
+                
+            }
+            
+        }
+        
+ 
+    }
+}
