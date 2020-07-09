@@ -1,0 +1,29 @@
+//Stack Solution
+
+class Solution {
+    public int getImportance(List<Employee> employees, int id) {
+         int total_imp =0;
+        Stack<Employee> s = new Stack<>();
+        HashMap<Integer, Employee> map = new HashMap<>();
+        
+        for(Employee emp: employees)
+        {
+            map.put(emp.id,emp);
+        }
+                 
+        s.push(map.get(id));
+               
+        while(!s.isEmpty())
+        {
+            Employee current = s.pop();
+            total_imp += current.importance;
+            for(int sub: current.subordinates)
+            {   
+                s.push(map.get(sub));
+            }
+            
+        }
+        
+        return total_imp;
+    }
+}
