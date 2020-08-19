@@ -52,3 +52,45 @@ class Solution:
         
         return board
         
+
+# Using depth first search
+# Time complexity - O(nm)
+# Space complexity - O(nm) -- implicit stack
+# did this solution run on leetcode? - yes
+class Solution:
+    def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
+        # no of rows and columns in a board
+        rows, cols = len(board), len(board[0])
+        
+        # if the click is on the mine, replace the clicked location with a 'X', and return the board.
+        if board[click[0]][click[1]]=="M":
+            board[click[0]][click[1]]="X"
+            return board
+        
+        self.neighbors = [[0,1],[0,-1],[1,0],[-1,0],[1,1],[1,-1],[-1,1],[-1,-1]]
+        
+        def count_neighbors(node, board, row, cols):
+            # count number of mines around the cell, and update it in the board.
+            count = 0
+            for neigh in self.neighbors:
+                new_cell = [neigh[0]+node[0], neigh[1]+node[1]]
+                if 0<=new_cell[0]<rows and  0<=new_cell[1]<cols:
+                    if board[new_cell[0]][new_cell[1]]=="M":
+                        count+=1
+            return count
+        
+        def dfs(node, board, rows, cols):
+            count = count_neighbors(node, board, rows, cols)
+            if count == 0:
+                board[node[0]][node[1]]="B"
+                # add the neighboring cells inside the queue.
+                for neigh in self.neighbors:
+                    new_cell = [neigh[0]+node[0], neigh[1]+node[1]]
+                    if 0<=new_cell[0]<rows and 0<=new_cell[1]<cols and board[new_cell[0]][new_cell[1]]=="E":
+                        board[new_cell[0]][new_cell[1]]="B"
+                        dfs(new_cell, board, rows, cols)
+            else: board[node[0]][node[1]]=str(count)
+                
+        dfs(click, board, rows, cols)
+        return board
+        
