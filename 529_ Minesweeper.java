@@ -1,6 +1,6 @@
     /*  Explanation
     # Leetcode problem link : https://leetcode.com/problems/minesweeper/
-    Time Complexity for operators : o(n*M) .. size of matrix
+    Time Complexity for operators : o(n*m) .. size of matrix
     Extra Space Complexity for operators : o(n*m) for recursive stack
     Did this code successfully run on Leetcode : NA
     Any problem you faced while coding this : No
@@ -9,9 +9,13 @@
         # Optimized approach: 
                               
             # 1. 
-                    A) 
-
-
+                    A) Check if click itself is on Mine. If it is then change it to X and return the board.
+                    B) If not then  do  the dfs traversal on the  8 directions  starting from given position of click.
+                    C) First getthen count of mine by  using getMine. It will check 8 directions on the  current  position
+                       and return the numbetr of mines around.
+                    D) Now, if mine == 0 then do the dfs  call again in 8 directions and change it to 'B'
+                       else, add the number of mines on that position and dont do dfs call.
+                    F) At the end, return board.
     */ 
 
 class Solution {

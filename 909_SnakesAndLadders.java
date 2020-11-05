@@ -9,7 +9,14 @@
         # Optimized approach: 
                               
             # 1. 
-                    A) 
+                    A) First create the move array by traversing though  the give matrix  properly.
+                    B) Then, just bfs on the given element.  First add 0 to the queue.
+                    C) Perform until Queue is not empty.
+                    D) Get the size of queue and perform for loop. In for loop first check if it is at the end if it is then retun minLevel.
+                    E) if not then  perform anaotherfor loop on each queue  elements for 6 times(1 to 6) and calculate next posotion
+                    F) Whil performing this, check if the valuf of that position is -1 if it is then just put postion on to queue
+                       if not then put the value of move[nextMove] on to the queue. Also, change value of current processed index of array to -2
+                    G) At the end retrun -1.
 
 
     */ 
