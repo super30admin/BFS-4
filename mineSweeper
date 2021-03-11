@@ -1,0 +1,68 @@
+class Solution {
+    
+    //Using BFS
+   //529. Minesweeper
+    //Time complexity : O(rows *cols)
+    //Space complexity :  O(rows *cols)
+    int[][] dirs;
+    int rows;
+    int cols;
+    public char[][] updateBoard(char[][] board, int[] click) {
+       
+        if(board == null || board.length ==0)
+            return board;
+        
+        //check if the click is a mine
+        if(board[click[0]][click[1]] =='M')
+        {
+            board[click[0]][click[1]] = 'X';
+            return board;
+        }
+        
+         rows = board.length;
+         cols = board[0].length;
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{click[0],click[1]});
+        board[click[0]][click[1]] ='B';
+        dirs = new int[][] {{0,-1},{-1,0},{0,1},{1,0},{1,1},{-1,-1},{1,-1},{-1,1}};
+        
+        while(!q.isEmpty()){
+            int[] curr = q.poll();
+            int mines = getMines(board,curr[0],curr[1]);
+            
+            if(mines ==0){
+                
+                   for(int[] dir :dirs){
+                int r = dir[0]+curr[0];
+                int c = dir[1]+curr[1];
+                
+                if(r>=0 && r < rows && c >=0 && c<cols && board[r][c] == 'E'){
+                    board[r][c] ='B';
+                    q.add(new int[]{r,c});
+                    
+                }
+            }
+            }
+            else{
+                board[curr[0]][curr[1]] = (char)(mines +'0');
+            }
+            
+         
+        }
+        return board;
+    }    
+        private int getMines(char[][] board, int i,int j){
+            
+            int count=0;
+            for(int[] dir: dirs){
+                int r = dir[0]+ i;
+                int c = dir[1]+ j;
+                
+                if(r>=0 && r < rows && c >=0 && c < cols && board[r][c] == 'M'){
+                    count++;
+                
+            }
+        }
+            return count;
+    }
+}

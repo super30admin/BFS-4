@@ -1,0 +1,85 @@
+class Solution {
+    
+    //909. Snakes and Ladders
+    //Time complexity : O(n^2)
+    //Space complexity :O(n^2) where n is the number or rows or columns
+    public int snakesAndLadders(int[][] board) {
+        
+         if(board == null || board.length ==0)
+             return 0;
+        
+        int n = board.length;
+        //make a 1D array
+        int[] moves = new int[n*n];
+        int i =n-1;//row --5
+        int j = 0; //column--0 (board[5][0])
+        int dir=0;
+        int idx =0; //index on 1D array
+        
+        while(i >=0 && j>=0){ //till you reach the first index
+            if(board[i][j]==-1)
+                moves[idx] =-1;
+            else
+                moves[idx] =board[i][j]-1;
+            idx++;
+            
+            //have to check if you want to increment the column or decrement 
+            if(dir%2 ==0)
+                j++;
+            else
+                j--;
+            
+            
+           if(j ==n){
+               i--;    //row is  decremented when you reach the last index
+               j--;
+               dir++;
+           }
+           else if( j< 0){
+                i--;
+                j++;
+               dir++;
+            }
+                
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        q.add(0);
+        moves[0] = -2;  //make it visited
+        int level =0;
+        
+        while(!q.isEmpty()){
+            int size = q.size();
+            
+            for(int k =0; k < size; k++){
+               
+            int curr = q.poll();
+                
+            if(curr == moves.length -1)
+                return level;
+                
+            for(int m=1;m <=6;m++){
+                int child = curr + m;
+                //check if it doesn't exceed the total length(in case of the given                   example, it shouldn't go over 36) if it is not visited 
+                if(child <=moves.length-1 && moves[child] !=-2){
+                    //if it's nothing, add it's index
+                    if(moves[child] == -1)
+                        q.add(child);
+                    else
+                        //add the value at that index(if it's ladder or snake)
+                        q.add(moves[child]);
+                    //make it visited
+                    moves[child] =-2;
+                } 
+            }
+                
+            }
+           
+            level++;
+            
+             
+        }
+        return -1;
+        
+    }
+}
