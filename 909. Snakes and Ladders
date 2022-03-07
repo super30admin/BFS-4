@@ -1,0 +1,95 @@
+
+//TC:- O(m*n)
+//SC:- O(m*n)
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        
+         int n = board.length;
+        int[] moves = new int[n*n];
+        
+        
+        int row = n-1;
+        int column = 0;
+        int even = 0;
+        int index = 0;
+        int minMoves = 0;
+        
+        while(row >= 0)
+        {
+            if(board[row][column] == -1)
+            {
+                moves[index] = index;   
+            }
+            
+            else
+            {
+                moves[index] = board[row][column] -1;
+            }
+            
+            index++;
+            
+            if(even%2 == 0)
+            {
+                column++;
+            }
+            
+            else
+            {
+                column--;
+            }
+            
+            if(column == n)
+            {
+                column--;
+                row--;
+                even++;
+                
+            }
+            
+            if(column == -1)
+            {
+                column++;
+                row--;
+                even++;
+            }
+        }
+        
+        Queue<Integer> q = new LinkedList<>();
+        q.add(moves[0]);
+        
+        moves[0] = -2;
+        
+        while(!q.isEmpty())
+        {
+            int size = q.size();
+            
+            for(int i = 0; i < size; i++)
+            {
+                int currPosition = q.poll();
+                 if(currPosition == n*n-1)
+                    {
+                        return minMoves;
+                    }
+                
+                for(int j = 1; j <= 6; j++)
+                {
+                    
+                    int newPosition = currPosition + j;
+
+                    
+                    if(newPosition < n*n && moves[newPosition] != -2)
+                    {
+                        q.add(moves[newPosition]);
+                        moves[newPosition] = -2;
+                    }
+                }
+            }
+            
+            minMoves++;
+        }
+        
+            return -1;
+
+        
+    }
+}
