@@ -2,8 +2,8 @@
 //BFS approach
 class Solution {
 
-//Time Complexity: 0(n^n) where n is the size of the board
-    //Space Complexity: 0(n^n)
+//Time Complexity: 0(m*n) where ms is the length of the row and n is the length of the column
+    //Space Complexity: 0(m*n)
     //Did it successfully run on leetcode: Yes
     //Did you face any problem while coding: no
 
