@@ -57,4 +57,45 @@ public class Problem1 {
         }
         return count;
     }
+
+    public char[][] updateBoard1(char[][] board, int[] click) {
+        // DFS Solution
+        // TC : O(M*N)
+        // SC : O(M*N)
+        if (board == null || board.length == 0) return board;
+
+        m = board.length;
+        n = board[0].length;
+
+        if (board[click[0]][click[1]] == 'M') {
+            board[click[0]][click[1]] = 'X';
+            return board;
+        }
+        dirs = new int[][]{{-1, 0}, {-1, -1}, {-1, 1}, {0, -1}, {0, 1}, {1, -1}, {1, 0}, {1, 1}};
+
+        // board[click[0]][click[1]] = 'B';
+        dfs(board, click[0], click[1]);
+        return board;
+    }
+
+    private void dfs(char[][] board, int i, int j) {
+        //base case
+
+        if (i < 0 || i == m || j < 0 || j == n) return;
+        if (board[i][j] == 'B') return;
+
+        //logic
+        board[i][j] = 'B';
+        int currMines = countMines(board, i, j);
+        if (currMines > 0) {
+            board[i][j] = (char) (currMines + '0');
+        } else {
+            for (int[] dir : dirs) {
+                int r = dir[0] + i;
+                int c = dir[1] + j;
+                dfs(board, r, c);
+            }
+        }
+    }
+
 }
