@@ -31,7 +31,6 @@ class Solution:
                     start[0] -= 1
                     start[1] = n - 1
                     flag = not flag
-        print(oneD)
         queue = deque()
         queue.append(0)
         moves = 0
