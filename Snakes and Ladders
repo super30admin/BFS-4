@@ -1,0 +1,29 @@
+class Solution:
+    def snakesAndLadders(self, board: List[List[int]]) -> int:
+        n = len(board)
+        def a(l):
+            r, c = divmod(l-1, n)
+            if r % 2 == 0:
+                return n-1-r, c
+            else:
+                return n-1-r, n-1-c
+        s = set()
+        q = collections.deque()
+        q.append((1, 0))
+        while q:
+            l, step = q.popleft()
+            r, c = a(l)
+            if board[r][c] != -1:
+                l = board[r][c]
+            if l == n*n:
+                return step
+            for x in range(1, 7):
+                L = l + x
+                if L <= n*n and L not in s:
+                    s.add(L)
+                    q.append((L, step+1))
+        return -1
+    
+# Time Complexity: O(n^2)
+# Space Complexity: O(n^2)
+# Successfully implemented on Leetcode
