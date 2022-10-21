@@ -1,0 +1,34 @@
+class Solution:
+    def updateBoard(self, board: List[List[str]], click: List[int]) -> List[List[str]]:
+        i = click[0]
+        j = click[1]
+        if board[i][j] == "M":
+            board[i][j] = "X"
+            return board
+        self.d(board, i, j)
+        return board
+    def d(self, board, i, j):
+        if i < 0 or i >= len(board) or j < 0 or j >= len(board[0]) or board[i][j] != "E":
+            return
+        m = self.s(board, i, j)
+        if m > 0:
+            board[i][j] = str(m)
+            return
+        board[i][j] = "B"
+        for x, y in self.directions:
+            self.d(board, i + x, j + y)   
+    def s(self, board, i, j):
+        res = 0
+        for x, y in self.directions:
+            ni, nj = i + x, j + y
+            if ni < 0 or ni >= len(board) or nj < 0 or nj >= len(board[0]):
+                continue
+            if board[ni][nj] == "M":
+                res += 1
+        return res
+    def __init__(self):
+        self.directions = [[0, 1], [1, 0], [-1, 0], [0, -1], [1, 1], [-1, -1], [1, -1], [-1, 1]]
+        
+# Time Complexity: O(mn)
+# Space Complexity: O(mn)
+# Successfully implemented on Leetcode
