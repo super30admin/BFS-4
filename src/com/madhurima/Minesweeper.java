@@ -1,5 +1,6 @@
 //Time Complexity = O(m*n) {worst case: going over all cells in the grid}
 //Space Complexity = O(m*n) {queue in case of bfs and recursive stack in case of dfs}
+//Was able to run in LeetCode: yes
 
 package com.madhurima;
 
