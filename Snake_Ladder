@@ -1,0 +1,73 @@
+//TimeComplexity.   O(n*n)
+//SpaceComplexity. O(n*n)
+
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int m = board.length;
+     
+        
+        int idx = 0;
+        int even = 0;
+        int[] moves = new int[m*m];
+        int i = m-1;
+        int j = 0;
+        
+        while(idx < m * m ){
+            if(board[i][j] == -1){
+                moves[idx] = -1;
+            }else{
+                moves[idx] = board[i][j]-1;
+            }
+            idx++;
+            
+            if(even % 2 == 0){
+                j++;
+                if(j == m){
+                    j--;
+                    i--;
+                    even++;
+                }
+            }else{
+                j--;
+                if(j == -1){
+                    j++;
+                    i--;
+                    even++;
+                }
+            }
+        }
+        
+        Queue<Integer> q1 = new LinkedList<>();
+        q1.add(0);
+        moves[0] = -2;
+        
+        int result = 0;
+        
+        while(!q1.isEmpty()){
+            
+            int size = q1.size();
+            
+            for(int l = 0; l  < size; l++){
+                int curr = q1.poll(); 
+                if(curr == m*m-1)return result;
+                for(int k = 1; k <= 6; k++){
+                    int child = curr +k;
+                    if(child < m*m){
+                        if(moves[child] != -2){
+                            if(moves[child] == -1){
+                                q1.add(child);
+                            }else{
+                                q1.add(moves[child]);
+                            }
+                            moves[child] = -2;
+                        }
+                        
+                    }
+                }
+            }
+            result++;
+                   
+        }
+        return -1;
+    }
+}
