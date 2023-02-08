@@ -1,6 +1,6 @@
 //https://leetcode.com/problems/minesweeper
 //TC : m*n 
-//SC : m*n
+//SC : O(1) - size of queue will be atmost 9 
 class Solution {
     int dirs[][] = {{0,1},{1,0},{0,-1},{-1,0},{-1,1},{1,1},{1,-1},{-1,-1}};
     public char[][] updateBoard(char[][] board, int[] click) {
