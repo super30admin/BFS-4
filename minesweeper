@@ -1,0 +1,47 @@
+class Solution {
+    int[][] dirs;
+    int m, n;
+    public char[][] updateBoard(char[][] board, int[] click) {
+        if(board == null || board.length == 0) {
+            return board;
+        }
+        m = board.length;
+        n = board[0].length;
+        Queue<int[]> q = new LinkedList<>();
+        dirs = new int[][]{{-1, 0},{1, 0}, {0, -1}, {0, 1}, {-1, -1},{-1, 1}, {1, -1}, {1, 1}}; 
+        if(board[click[0]][click[1]] == 'M') {
+            board[click[0]][click[1]] = 'X';
+            return board;
+        }
+        dfs(board, click);
+        return board;
+    }
+    private void dfs(char[][] board, int[] click) {
+        
+        if(click[0] < 0 || click[0] == m || click[1] < 0 || click[1] == n || board[click[0]][click[1]] != 'E') {
+            return;
+        }
+        board[click[0]][click[1]] = 'B';
+        int countMines = countMines(board, click);
+        if(countMines == 0) {
+            for(int[] dir: dirs) {
+                int nr = click[0] + dir[0];
+                int nc = click[1] + dir[1];
+                dfs(board, new int[]{nr, nc});
+            }
+        } else {
+            board[click[0]][click[1]] = (char)(countMines + '0'); 
+        }
+    }
+    private int countMines(char[][] board, int[] curr) {
+        int count = 0;
+        for(int[] dir: dirs) {
+            int nr = curr[0] + dir[0];
+            int nc = curr[1] + dir[1];
+            if(nr >= 0 && nr < m && nc >= 0 && nc < n && board[nr][nc] == 'M') {
+                count++;
+            }
+        }
+        return count;
+    }
+}
