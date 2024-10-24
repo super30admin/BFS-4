@@ -1,0 +1,122 @@
+
+Code 529. Minesweeper
+class Solution {
+    int [][]dirs;
+    public char[][] updateBoard(char[][] board, int[] click) {
+        if(board==null || board.length==0)return board;
+        int m=board.length;
+        int n=board[0].length;
+        this.dirs=new int[][]{{0,1},{1,0},{0,-1},{-1,0},{-1,-1},{1,-1},{-1,1},{1,1}};
+        if(board[click[0]][click[1]]=='M'){
+           board[click[0]][click[1]]='X';
+           return board;
+        }
+        Queue<int[]>q=new LinkedList<>();
+        q.add(new int[]{click[0],click[1]});
+        board[click[0]][click[1]]='B';
+
+        while(!q.isEmpty()){
+            int [] curr=q.poll();
+            int count=countMines(board,curr,m,n);
+            if(count==0){
+                for(int dir[]:dirs){
+                    int r=dir[0]+curr[0];
+                    int c=dir[1]+curr[1];
+                    if(r<m && c<n && r>=0 && c>=0 && board[r][c]=='E'){
+                        q.add(new int[]{r,c});
+                        board[r][c]='B';
+                    }
+                }
+            }else{
+                board[curr[0]][curr[1]]=(char)(count+'0');
+            }
+        }
+    return board;
+    }
+    private int countMines(char[][] board, int[] click,int m,int n){
+        int total=0;
+        for(int []dir:dirs){
+            int r=dir[0]+click[0];
+            int c=dir[1]+click[1];
+            if(r>=0 && c>=0 && r<m && c<n && board[r][c]=='M'){
+                total++;
+            }
+        }
+        return total;
+    }
+}
+
+
+
+
+Code 909. Snakes and Ladders
+
+
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int n=board.length;
+        int []arr=new int[n*n];
+        boolean flag=true;
+        int idx=0;
+        int i1=n-1;
+        int j1=0;
+
+        while(idx<n*n){
+            if(board[i1][j1]==-1){
+                arr[idx]=-1;
+            }else{
+                arr[idx]=board[i1][j1]-1;
+            }
+            idx++;
+
+            if(flag){
+                j1++;
+                if(j1==n){
+                    j1--;
+                    i1--;
+                    flag=false;
+                }
+            }else{
+                j1--;
+                if(j1==-1){
+                    j1++;
+                    i1--;
+                    flag=true;
+                }
+
+            }
+        }
+        int moves=0;
+        Queue<Integer>q=new LinkedList<>();
+        HashSet<Integer>set=new HashSet<>();
+        q.add(0);set.add(0);
+        while(!q.isEmpty()){
+            int size=q.size();
+            for(int i=0;i<size;i++){
+                int curr=q.poll();
+                if(curr==n*n-1)return moves;
+
+                for(int j=1;j<7;j++){
+                    int child=curr+j;
+                    if(child<n*n){
+                    if(arr[child]==-1){
+                        if(!set.contains(child)){
+                            set.add(child);
+                            q.add(child);
+                        }
+                    }else{
+                        if(!set.contains(arr[child])){
+                            q.add(arr[child]);
+                            set.add(arr[child]);
+                        }
+                    }
+                }
+                }
+            }
+            moves++;
+
+        }
+        return -1;
+        
+    }
+}
