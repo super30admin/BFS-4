@@ -45,3 +45,70 @@ class Solution {
         return count;
     }
 }
+
+
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int moves=0;
+        int size=0;
+        int n = board.length;
+        int[] nums = new int[n*n];
+        int i=0;
+        int even=0;
+        int row=n-1;
+        int col=0;
+        Queue<Integer> q = new LinkedList<>();
+        while(i < n*n) {
+            if(board[row][col] != -1) {
+                nums[i] = board[row][col]-1;
+            } else {
+                nums[i] = -1;
+            }
+            if(even%2 == 0) {
+                col++;
+                if (col == n) {
+                    row--;
+                    col = n-1;
+                    even++;
+                }
+
+            } else {
+                col--;
+                if (col == -1) {
+                    row--;
+                    col=0;
+                    even++;
+                }
+            }
+            i++;
+        }
+        q.add(0);
+        while(!q.isEmpty()) {
+            size = q.size();
+            for (int index=0;index<size;index++) {
+                int curr = q.poll();
+                if (curr == n*n-1) {
+                    System.out.println(moves);
+                    return moves;
+                }
+                for(int j=1;j<7;j++) {
+                    int child = curr + j;
+                    if (child >= n*n) {
+                        continue;
+                    }
+                    if (nums[child] != -2) {
+                        if (nums[child] != -1) {
+                            q.add(nums[child]);
+                            nums[child] = -2;
+                        } else {
+                            q.add(child);
+                            nums[child] = -2;
+                        }
+                    } 
+                }
+            }
+            moves++;
+        }
+        return -1;
+    }
+}
