@@ -1,0 +1,76 @@
+// Time Complexity :O(m*n)+O(m*n)
+// Space Complexity :O(m*n)
+// Did this code successfully run on Leetcode :yes
+// Any problem you faced while coding this :no
+// Your code here along with comments explaining your approach:BFS aaproach where first i converted matrix into 1d array then process those array in BS approach by considering all 6 possiblities for each cell.
+
+
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int n = board.length * board[0].length;
+        int[] arr = new int[n];
+        Queue<Integer> qu = new LinkedList<>();
+        boolean flag = true;
+        int idx = 0;
+        int r = board.length - 1;
+        int c = 0;
+        while (idx < n) {
+            if (flag) {
+                if (board[r][c] == -1) {
+                    arr[idx] = board[r][c];
+                } else {
+                    arr[idx] = board[r][c] - 1;
+                }
+
+                c++;
+                if (c >= board.length) {
+                    r--;
+                    c--;
+                    flag = false;
+                }
+            } else {
+                if (board[r][c] == -1) {
+                    arr[idx] = board[r][c];
+                } else {
+                    arr[idx] = board[r][c] - 1;
+                }
+                c--;
+                if (c < 0) {
+                    r--;
+                    c++;
+                    flag = true;
+                }
+            }
+            idx++;
+        }
+        qu.add(0);
+        arr[0] = -2;
+        int jumps = 0;
+        while (!qu.isEmpty()) {
+            int size = qu.size();
+            for (int i = 0; i < size; i++) {
+                int curr = qu.poll();
+                if (curr == n - 1)
+                    return jumps;
+                for (int j = 1; j <= 6; j++) {
+                    int currIdx = curr + j;
+                    if (currIdx > n - 1)
+                        break;
+
+                    if (arr[currIdx] == -1) {
+                        qu.add(currIdx);
+                    } else {
+                        if (arr[currIdx] != -2) {
+                            qu.add(arr[currIdx]);
+                        }
+                    }
+                    arr[currIdx] = -2;
+
+                }
+            }
+            jumps++;
+        }
+
+        return -1;
+    }
+}

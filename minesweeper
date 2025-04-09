@@ -1,0 +1,105 @@
+// Time Complexity :O(m*n)
+// Space Complexity :O(m*n)
+// Did this code successfully run on Leetcode :yes
+// Any problem you faced while coding this :no
+// Your code here along with comments explaining your approach:BFS approach where marking already vivted cell as 'B' and aavoidng reapreating of subproblems
+
+
+
+class Solution {
+    public char[][] updateBoard(char[][] board, int[] click) {
+        if(board[click[0]][click[1]] == 'M'){
+           board[click[0]][click[1]] = 'X';
+            return board;
+        }
+        Queue<int[]> qu=new LinkedList<>();
+         int[][] dirs={{0,1},{1,0},{0,-1},{-1,0},{-1,1},{1,-1},{1,1},{-1,-1}};
+        qu.add(click);
+        board[click[0]][click[1]] = 'B';
+        while(!qu.isEmpty()){
+           int[] curr=qu.poll();
+              int r=curr[0];
+             int c=curr[1];
+             int count=countMines(board,r,c,dirs);
+             if(count == 0){
+           for (int[] dir : dirs) {
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+            if(nr >= 0 && nc >= 0 && nr < board.length && nc < board[0].length &&board[nr][nc]  == 'E'){
+                qu.add(new int[]{nr,nc});
+                board[nr][nc]='B';
+                }
+             }
+             }else{
+                board[r][c]=(char)(count+'0');
+             }
+     
+        }
+        return board;
+
+    }
+
+    public int countMines(char[][] board, int r, int c,  int[][] dirs) {
+        int count=0;
+        for (int[] dir : dirs) {
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+            if(nr >= 0 && nc >= 0 && nr < board.length && nc < board[0].length && board[nr][nc]  == 'M'){
+                count++;
+            }
+        }
+        return count;
+    }
+}
+
+
+
+// Time Complexity :O(m*n)
+// Space Complexity :O(m*n)
+// Did this code successfully run on Leetcode :yes
+// Any problem you faced while coding this :no
+// Your code here along with comments explaining your approach:DFS approach exploring all possible path and  where marking already vivted cell as 'B' and aavoidng reapreating of subproblems
+
+class Solution {
+    public char[][] updateBoard(char[][] board, int[] click) {
+        if (board[click[0]][click[1]] == 'M') {
+            board[click[0]][click[1]] = 'X';
+            return board;
+        }
+        int[][] dirs = { { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 }, { -1, 1 }, { 1, -1 }, { 1, 1 }, { -1, -1 } };
+        dfs(board, click[0], click[1], dirs);
+        return board;
+
+    }
+
+    public void dfs(char[][] board, int i, int j, int[][] dirs) {
+        //base
+        if (i < 0 || j < 0 || i >= board.length || j >= board[0].length || board[i][j] != 'E') {
+            return;
+        }
+        //logic
+        board[i][j]='B';
+        int count = countMines(board, i, j, dirs);
+        if (count == 0) {
+            for (int[] dir : dirs) {
+                int nr = i + dir[0];
+                int nc = j + dir[1];
+                dfs(board, nr, nc, dirs);
+            }
+        } else {
+            board[i][j] = (char) (count + '0');
+        }
+    }
+
+    public int countMines(char[][] board, int r, int c, int[][] dirs) {
+        int count = 0;
+        for (int[] dir : dirs) {
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+            if (nr >= 0 && nc >= 0 && nr < board.length && nc < board[0].length && board[nr][nc] == 'M') {
+                count++;
+            }
+        }
+        return count;
+    }
+}
