@@ -58,7 +58,7 @@ def countMines(board, i, j, M, N):
     count = 0
     for dir in dirs:
         x, y = i + dir[0], j + dir[1]
-        if 0<=x<=M-1 and 0<y<=N-1 and board[x][y] == "M":
+        if 0<=x<=M-1 and 0<=y<=N-1 and board[x][y] == "M":
             count += 1
     return count
 
