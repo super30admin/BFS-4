@@ -1,0 +1,54 @@
+// Time Complexity: O(m*n)
+// Space Complexity: O(m*n)
+
+// Starting from the click position, do BFS and check 8 directions of a position
+// If the number of mines near a position is 0, change position value to B, else give count of mines
+// If a mine was clicked, change position value to X and return the board
+
+class Solution {
+    public char[][] updateBoard(char[][] board, int[] click) {
+        int m = board.length;
+        int n = board[0].length;
+        // Clicked position was a mine, game over
+        if(board[click[0]][click[1]] == 'M') {
+            board[click[0]][click[1]] = 'X';
+            return board;
+        }
+        int[][] dirs = {{0,1}, {1,0}, {-1,0}, {0,-1}, {1,1}, {-1,-1}, {1,-1}, {-1,1}};
+        Queue<int[]> q = new LinkedList<>();
+        q.add(click);
+        board[click[0]][click[1]] = 'B';
+
+        while(!q.isEmpty()) {
+            int[] pos = q.poll();
+            int count = countMines(board, pos[0], pos[1], dirs);
+            // No mines nearby, change cell to blank
+            if(count == 0) {
+                for(int[] d : dirs) {
+                    int r = pos[0] + d[0];
+                    int c = pos[1] + d[1];
+                    if(r >= 0 && r < m && c >= 0 && c < n && board[r][c] == 'E') {
+                        q.add(new int[]{r, c});
+                        board[r][c] = 'B';
+                    }
+                }
+            }
+            // There are mines nearby, change cell to mine count
+            else {
+                board[pos[0]][pos[1]] = (char)(count + '0');
+            }
+        }
+        return board;
+    }
+
+    private int countMines(char[][] board, int i, int j, int[][] dirs) {
+        int count = 0;
+        for(int[] d : dirs) {
+            int r = i + d[0];
+            int c = j + d[1];
+            if(r >= 0 && r < board.length && c >= 0 && c < board[0].length && board[r][c] == 'M')
+                count++;
+        }
+        return count;
+    }
+}
