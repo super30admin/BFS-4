@@ -1,6 +1,6 @@
 # BFS-4
 
-## Problem1: Minesweeper (https://leetcode.com/problems/minesweeper/)
+## Problem1: MinesweeperBFS (https://leetcode.com/problems/minesweeper/)
 
 
 
